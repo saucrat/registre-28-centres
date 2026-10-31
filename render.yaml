@@ -1,0 +1,16 @@
+services:
+  - type: web
+    name: registre-28-centres
+    runtime: node
+    plan: free
+    region: frankfurt
+    buildCommand: npm install --include=dev && npm run build
+    startCommand: npm start
+    healthCheckPath: /api/health
+    envVars:
+      - key: NODE_ENV
+        value: production
+      - key: MONGODB_DB
+        value: registre28
+      - key: MONGODB_URI
+        sync: false
