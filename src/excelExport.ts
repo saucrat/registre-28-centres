@@ -185,24 +185,26 @@ function fillTrainers(sheet: Worksheet, data: Registry) {
     fitToHeight: 1,
   };
   sheet.columns = [
+    { width: 10 },
+    { width: 32 },
     { width: 14 },
-    { width: 36 },
     { width: 16 },
-    { width: 18 },
     { width: 16 },
-    { width: 18 },
-    { width: 18 },
-    { width: 18 },
+    { width: 20 },
+    { width: 14 },
+    { width: 14 },
+    { width: 14 },
+    { width: 16 },
   ];
 
-  sheet.mergeCells("A1:H1");
+  sheet.mergeCells("A1:J1");
   const project = sheet.getCell("A1");
   project.value = PROJECT_TITLE;
   project.font = { name: "Calibri", bold: true, size: 14, color: { argb: GREEN } };
   project.alignment = { vertical: "middle", horizontal: "center", wrapText: true };
   sheet.getRow(1).height = 24;
 
-  sheet.mergeCells("A3:H3");
+  sheet.mergeCells("A3:J3");
   const atelier = sheet.getCell("A3");
   atelier.value = ATELIER_TITLE;
   atelier.font = { name: "Calibri", size: 12, color: { argb: INK } };
@@ -218,10 +220,12 @@ function fillTrainers(sheet: Worksheet, data: Registry) {
     "Nom et prenom",
     "Structure ",
     "Fonction",
+    "NNI",
+    "N° de compte",
+    "Banque",
     "Montant/jour",
     "Nbres de jours",
     "Montant Total",
-    "Emargement",
   ];
   headers.forEach((label, index) => {
     const cell = sheet.getCell(7, index + 1);
@@ -238,14 +242,16 @@ function fillTrainers(sheet: Worksheet, data: Registry) {
       person.nom,
       person.structure,
       person.fonction,
+      person.nni,
+      person.compte,
+      person.banque,
       person.montantJour,
       person.jours,
       total,
-      person.emargement,
     ];
     values.forEach((value, column) => {
       const cell = sheet.getCell(rowNumber, column + 1);
-      const textual = column === 1 || column === 2 || column === 3 || column === 7;
+      const textual = column === 1 || column === 2 || column === 3 || column === 4 || column === 5 || column === 6;
       cell.value = value == null || value === "" ? null : textual ? String(value) : value;
       if (textual) cell.numFmt = "@";
       if (!textual) cell.numFmt = "#,##0";
@@ -259,14 +265,14 @@ function fillTrainers(sheet: Worksheet, data: Registry) {
   const totalLabel = sheet.getCell(totalRow, 1);
   totalLabel.value = "Total";
   const grand = data.trainers.reduce((acc, person) => acc + (personTotal("trainers", person) ?? 0), 0);
-  const totalCell = sheet.getCell(totalRow, 7);
+  const totalCell = sheet.getCell(totalRow, 10);
   const lastData = totalRow - 1;
   totalCell.value =
     data.trainers.length > 0
-      ? { formula: `SUM(G8:G${lastData})`, result: grand }
+      ? { formula: `SUM(J8:J${lastData})`, result: grand }
       : 0;
   totalCell.numFmt = "#,##0";
-  for (let column = 1; column <= 8; column += 1) {
+  for (let column = 1; column <= 10; column += 1) {
     const cell = sheet.getCell(totalRow, column);
     cell.font = { name: "Calibri", bold: true, size: 12, color: { argb: GREEN } };
     cell.alignment = { vertical: "middle", horizontal: "center" };
@@ -276,7 +282,7 @@ function fillTrainers(sheet: Worksheet, data: Registry) {
   sheet.getRow(totalRow).height = 22;
 
   const sentenceRow = totalRow + 2;
-  sheet.mergeCells(sentenceRow, 2, sentenceRow, 8);
+  sheet.mergeCells(sentenceRow, 2, sentenceRow, 10);
   const sentence = sheet.getCell(sentenceRow, 2);
   sentence.value = `Arrêté en état de paiement à la somme de : ${frenchOuguiyas(grand)}`;
   sentence.font = { name: "Calibri", italic: true, size: 12, color: { argb: INK } };
@@ -291,14 +297,14 @@ function fillTrainers(sheet: Worksheet, data: Registry) {
   const raf = sheet.getCell(sign + 1, 1);
   raf.value = "RAF";
   raf.font = { name: "Calibri", bold: true, size: 12 };
-  const coord = sheet.getCell(sign + 1, 7);
+  const coord = sheet.getCell(sign + 1, 9);
   coord.value = "Coordinateur";
   coord.font = { name: "Calibri", bold: true, size: 12 };
 
   const rafName = sheet.getCell(sign + 2, 1);
   rafName.value = "Abdellahi Barhim";
   rafName.font = { name: "Calibri", size: 12 };
-  const coordName = sheet.getCell(sign + 2, 7);
+  const coordName = sheet.getCell(sign + 2, 9);
   coordName.value = "Dr Sidi Mohamed Abdel Aziz";
   coordName.font = { name: "Calibri", size: 12 };
 }

@@ -20,9 +20,11 @@ type TrainerDraft = {
   nom: string;
   structure: string;
   fonction: string;
+  nni: string;
+  compte: string;
+  banque: string;
   montantJour: string;
   jours: string;
-  emargement: string;
 };
 
 export function RecordForm({
@@ -53,10 +55,10 @@ export function RecordForm({
   const [error, setError] = useState("");
   const [confirmDelete, setConfirmDelete] = useState(false);
 
+  const draftNni = kind === "beneficiaries" ? beneficiary.nni.trim() : trainer.nni.trim();
   const duplicateNni =
-    kind === "beneficiaries" &&
-    beneficiary.nni.trim() !== "" &&
-    beneficiaries.some((item) => item.id !== selfId && item.nni.trim() === beneficiary.nni.trim());
+    draftNni !== "" &&
+    beneficiaries.some((item) => item.id !== selfId && item.nni.trim() === draftNni);
   const duplicatePhone =
     kind === "beneficiaries" &&
     beneficiary.telephone.trim() !== "" &&
@@ -80,7 +82,8 @@ export function RecordForm({
     }
     setError("");
     if (kind === "beneficiaries") {
-      const numero = initial && "nni" in initial ? initial.numero : 0;
+      const existing = initial && "transport" in initial ? (initial as Beneficiary) : null;
+      const numero = existing?.numero ?? 0;
       const id = selfId ?? crypto.randomUUID();
       const next: Beneficiary = {
         id,
@@ -93,22 +96,24 @@ export function RecordForm({
         banque: beneficiary.banque.trim(),
         transport: transport.value,
         jours: days.value,
-        texted: initial && "nni" in initial ? Boolean(initial.texted) : false,
+        texted: existing ? Boolean(existing.texted) : false,
       };
       onSubmit(kind, next);
       return;
     }
-    const numero = initial && "structure" in initial ? initial.numero : 0;
+    const existing = initial && "montantJour" in initial ? (initial as Trainer) : null;
     const next: Trainer = {
       id: selfId ?? crypto.randomUUID(),
-      numero,
+      numero: existing?.numero ?? 0,
       nom: name,
       structure: trainer.structure.trim(),
       fonction: trainer.fonction.trim(),
+      nni: trainer.nni.trim(),
+      compte: trainer.compte.trim(),
+      banque: trainer.banque.trim(),
       montantJour: transport.value,
       jours: days.value,
-      emargement: trainer.emargement.trim(),
-      texted: initial && "structure" in initial ? Boolean(initial.texted) : false,
+      texted: existing ? Boolean(existing.texted) : false,
     };
     onSubmit(kind, next);
   }
@@ -237,6 +242,31 @@ export function RecordForm({
             allowOther
           />
           <InputField
+            labelAr="الرقم الوطني"
+            labelFr="NNI"
+            value={trainer.nni}
+            onChange={(nni) => setTrainer({ ...trainer, nni })}
+            ltr
+            emptyAsMissing
+          />
+          <InputField
+            labelAr="رقم الحساب"
+            labelFr="N° de compte"
+            value={trainer.compte}
+            onChange={(compte) => setTrainer({ ...trainer, compte })}
+            ltr
+            emptyAsMissing
+            wide
+          />
+          <SelectField
+            labelAr="البنك"
+            labelFr="Banque"
+            value={trainer.banque}
+            onChange={(banque) => setTrainer({ ...trainer, banque })}
+            options={BANKS}
+            allowOther
+          />
+          <InputField
             labelAr="المبلغ لليوم"
             labelFr="Montant / jour"
             value={trainer.montantJour}
@@ -251,14 +281,6 @@ export function RecordForm({
             onChange={(jours) => setTrainer({ ...trainer, jours })}
             ltr
             emptyAsMissing
-          />
-          <InputField
-            labelAr="الإمضاء"
-            labelFr="Émargement"
-            value={trainer.emargement}
-            onChange={(emargement) => setTrainer({ ...trainer, emargement })}
-            emptyAsMissing
-            wide
           />
         </div>
       )}
@@ -374,9 +396,11 @@ function emptyTrainer(): TrainerDraft {
     nom: "",
     structure: "",
     fonction: "",
+    nni: "",
+    compte: "",
+    banque: "",
     montantJour: "2000",
     jours: "15",
-    emargement: "",
   };
 }
 
@@ -398,8 +422,10 @@ function trainerToDraft(person: Trainer): TrainerDraft {
     nom: person.nom,
     structure: person.structure,
     fonction: person.fonction,
+    nni: person.nni,
+    compte: person.compte,
+    banque: person.banque,
     montantJour: person.montantJour == null ? "" : String(person.montantJour),
     jours: person.jours == null ? "" : String(person.jours),
-    emargement: person.emargement,
   };
 }

@@ -18,9 +18,11 @@ export type Trainer = {
   nom: string;
   structure: string;
   fonction: string;
+  nni: string;
+  compte: string;
+  banque: string;
   montantJour: number | null;
   jours: number | null;
-  emargement: string;
   texted?: boolean;
 };
 

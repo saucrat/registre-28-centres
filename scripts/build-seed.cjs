@@ -52,9 +52,11 @@ for (const row of trainerRows) {
     nom: text(row[1]),
     structure: text(row[2]),
     fonction: text(row[3]),
+    nni: text(row[8] ?? ""),
+    compte: text(row[9] ?? ""),
+    banque: text(row[10] ?? ""),
     montantJour: num(row[4]),
     jours: num(row[5]),
-    emargement: text(row[7]),
   });
 }
 

@@ -224,7 +224,7 @@ export function App() {
 
   const bankOptions = useMemo(() => {
     const options = [...BANKS];
-    for (const person of data?.beneficiaries ?? []) {
+    for (const person of [...(data?.beneficiaries ?? []), ...(data?.trainers ?? [])]) {
       if (person.banque && !options.some((item) => item.value === person.banque)) {
         options.push({ value: person.banque, ar: person.banque, fr: person.banque });
       }
@@ -234,7 +234,7 @@ export function App() {
       { value: "__missing__", ar: "غير مُعطى", fr: "Non renseigné" },
       ...options,
     ];
-  }, [data?.beneficiaries]);
+  }, [data?.beneficiaries, data?.trainers]);
 
   const beneficiaries = (data?.beneficiaries ?? []).filter((person) => {
     if (!matchesQuery([person.nom, person.nni, person.telephone, person.compte, person.banque, person.fonction, person.numero], query)) {
@@ -246,9 +246,11 @@ export function App() {
   });
 
   const trainers = (data?.trainers ?? []).filter((person) => {
-    if (!matchesQuery([person.nom, person.structure, person.fonction, person.emargement, person.numero], query)) {
+    if (!matchesQuery([person.nom, person.nni, person.compte, person.banque, person.structure, person.fonction, person.numero], query)) {
       return false;
     }
+    if (bank === "__missing__" && person.banque.trim()) return false;
+    if (bank !== "all" && bank !== "__missing__" && person.banque !== bank) return false;
     return passStatus("trainers", person, status);
   });
 
@@ -524,18 +526,16 @@ export function App() {
               </button>
             ))}
           </div>
-          {tab === "beneficiaries" ? (
-            <SelectField
-              dense
-              hideLabel
-              allowEmpty={false}
-              labelAr="البنك"
-              labelFr="Banque"
-              value={bank}
-              onChange={setBank}
-              options={bankOptions}
-            />
-          ) : null}
+          <SelectField
+            dense
+            hideLabel
+            allowEmpty={false}
+            labelAr="البنك"
+            labelFr="Banque"
+            value={bank}
+            onChange={setBank}
+            options={bankOptions}
+          />
         </section>
 
         {rows.length > 0 ? (
@@ -855,12 +855,13 @@ function beneficiaryRow(person: Beneficiary): PersonRow {
 }
 
 function trainerRow(person: Trainer): PersonRow {
+  const bank = person.banque.trim();
   return {
     id: person.id,
     numero: person.numero,
     name: person.nom.trim() || "بدون اسم",
-    meta: [person.structure.trim(), person.fonction.trim()].filter(Boolean).join(" · ") || "—",
-    gap: person.emargement.trim() ? "" : "بدون إمضاء",
+    meta: [person.structure.trim(), bank || person.fonction.trim()].filter(Boolean).join(" · ") || "—",
+    gap: bank ? "" : "البنك غير مُعطى",
     amount: money(personTotal("trainers", person)),
     incomplete: gapsOf("trainers", person).length > 0,
     phone: "",

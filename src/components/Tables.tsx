@@ -87,10 +87,12 @@ export function TrainerTable({
           <Th ar="الاسم واللقب" fr="Nom et prénom" />
           <Th ar="المؤسسة" fr="Structure" />
           <Th ar="الوظيفة" fr="Fonction" />
+          <Th ar="الرقم الوطني" fr="NNI" />
+          <Th ar="رقم الحساب" fr="N° de compte" />
+          <Th ar="البنك" fr="Banque" />
           <Th ar="المبلغ لليوم" fr="Montant / jour" />
           <Th ar="الأيام" fr="Jours" />
           <Th ar="المجموع" fr="Total MRU" />
-          <Th ar="الإمضاء" fr="Émargement" />
           <Th ar="الحالة" fr="État" />
           <Th ar="الإجراءات" fr="Actions" />
         </tr>
@@ -111,10 +113,12 @@ export function TrainerTable({
               <td title={optionNote(FONCTIONS, person.fonction)}>
                 <Plain value={person.fonction} />
               </td>
+              <td><Plain value={person.nni} numeric /></td>
+              <td><Plain value={person.compte} numeric /></td>
+              <td><Plain value={person.banque} /></td>
               <td className="num">{person.montantJour == null ? <MissingMark dense /> : formatNumber(person.montantJour)}</td>
               <td className="num">{person.jours == null ? <MissingMark dense /> : formatNumber(person.jours)}</td>
               <td className="num total-cell">{total == null ? <MissingMark dense /> : formatNumber(total)}</td>
-              <td><Plain value={person.emargement} /></td>
               <td><StatusBadge incomplete={incomplete} /></td>
               <td className="sticky-end">
                 <Actions onEdit={() => onEdit(person)} onConfirm={() => onConfirm(person)} />

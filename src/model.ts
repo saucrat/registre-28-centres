@@ -48,9 +48,11 @@ function trainerGaps(person: Trainer): Gap[] {
   add(isBlank(person.nom), "الاسم واللقب", "Nom et prénom");
   add(isBlank(person.structure), "المؤسسة", "Structure");
   add(isBlank(person.fonction), "الوظيفة", "Fonction");
+  add(isBlank(person.nni), "الرقم الوطني", "NNI");
+  add(isBlank(person.compte), "رقم الحساب", "N° de compte");
+  add(isBlank(person.banque), "البنك", "Banque");
   add(person.montantJour == null, "المبلغ لليوم", "Montant / jour");
   add(person.jours == null, "عدد الأيام", "Nombre de jours");
-  add(isBlank(person.emargement), "الإمضاء", "Émargement");
   return gaps;
 }
 
@@ -121,9 +123,11 @@ function coerceTrainer(value: unknown, index: number): Trainer | null {
     nom: row.nom,
     structure: text(row.structure),
     fonction: text(row.fonction),
+    nni: text(row.nni),
+    compte: text(row.compte),
+    banque: text(row.banque),
     montantJour: amount(row.montantJour),
     jours: amount(row.jours),
-    emargement: text(row.emargement),
     texted: row.texted === true,
   };
 }

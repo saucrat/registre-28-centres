@@ -479,9 +479,11 @@ export const SEED: Registry = {
       "nom": "Dr Mouhamed Salem Dhoueib",
       "structure": "DRS",
       "fonction": "Médecin",
+      "nni": "",
+      "compte": "",
+      "banque": "",
       "montantJour": 2000,
-      "jours": 15,
-      "emargement": ""
+      "jours": 15
     },
     {
       "id": "t-2",
@@ -489,9 +491,11 @@ export const SEED: Registry = {
       "nom": "Dr Diagana Youssouf",
       "structure": "CHS",
       "fonction": "GYNECO_OBST",
+      "nni": "",
+      "compte": "",
+      "banque": "",
       "montantJour": 2000,
-      "jours": 15,
-      "emargement": ""
+      "jours": 15
     }
   ]
 };
