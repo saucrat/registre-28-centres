@@ -49,6 +49,7 @@ function trainerGaps(person: Trainer): Gap[] {
   add(isBlank(person.structure), "المؤسسة", "Structure");
   add(isBlank(person.fonction), "الوظيفة", "Fonction");
   add(isBlank(person.nni), "الرقم الوطني", "NNI");
+  add(isBlank(person.telephone), "الهاتف", "Téléphone");
   add(isBlank(person.compte), "رقم الحساب", "N° de compte");
   add(isBlank(person.banque), "البنك", "Banque");
   add(person.montantJour == null, "المبلغ لليوم", "Montant / jour");
@@ -124,6 +125,7 @@ function coerceTrainer(value: unknown, index: number): Trainer | null {
     structure: text(row.structure),
     fonction: text(row.fonction),
     nni: text(row.nni),
+    telephone: text(row.telephone),
     compte: text(row.compte),
     banque: text(row.banque),
     montantJour: amount(row.montantJour),

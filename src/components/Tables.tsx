@@ -88,6 +88,7 @@ export function TrainerTable({
           <Th ar="المؤسسة" fr="Structure" />
           <Th ar="الوظيفة" fr="Fonction" />
           <Th ar="الرقم الوطني" fr="NNI" />
+          <Th ar="الهاتف" fr="Téléphone" />
           <Th ar="رقم الحساب" fr="N° de compte" />
           <Th ar="البنك" fr="Banque" />
           <Th ar="المبلغ لليوم" fr="Montant / jour" />
@@ -114,6 +115,7 @@ export function TrainerTable({
                 <Plain value={person.fonction} />
               </td>
               <td><Plain value={person.nni} numeric /></td>
+              <td><Plain value={person.telephone} numeric /></td>
               <td><Plain value={person.compte} numeric /></td>
               <td><Plain value={person.banque} /></td>
               <td className="num">{person.montantJour == null ? <MissingMark dense /> : formatNumber(person.montantJour)}</td>

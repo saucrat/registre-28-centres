@@ -19,6 +19,7 @@ export type Trainer = {
   structure: string;
   fonction: string;
   nni: string;
+  telephone: string;
   compte: string;
   banque: string;
   montantJour: number | null;

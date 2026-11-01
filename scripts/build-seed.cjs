@@ -53,6 +53,7 @@ for (const row of trainerRows) {
     structure: text(row[2]),
     fonction: text(row[3]),
     nni: text(row[8] ?? ""),
+    telephone: text(row[11] ?? ""),
     compte: text(row[9] ?? ""),
     banque: text(row[10] ?? ""),
     montantJour: num(row[4]),

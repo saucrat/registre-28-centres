@@ -21,6 +21,7 @@ type TrainerDraft = {
   structure: string;
   fonction: string;
   nni: string;
+  telephone: string;
   compte: string;
   banque: string;
   montantJour: string;
@@ -56,14 +57,14 @@ export function RecordForm({
   const [confirmDelete, setConfirmDelete] = useState(false);
 
   const draftNni = kind === "beneficiaries" ? beneficiary.nni.trim() : trainer.nni.trim();
+  const draftPhone = kind === "beneficiaries" ? beneficiary.telephone.trim() : trainer.telephone.trim();
   const duplicateNni =
     draftNni !== "" &&
     beneficiaries.some((item) => item.id !== selfId && item.nni.trim() === draftNni);
   const duplicatePhone =
-    kind === "beneficiaries" &&
-    beneficiary.telephone.trim() !== "" &&
+    draftPhone !== "" &&
     beneficiaries.some(
-      (item) => item.id !== selfId && item.telephone.trim() === beneficiary.telephone.trim(),
+      (item) => item.id !== selfId && item.telephone.trim() === draftPhone,
     );
 
   const transport = parseAmount(kind === "beneficiaries" ? beneficiary.transport : trainer.montantJour);
@@ -109,6 +110,7 @@ export function RecordForm({
       structure: trainer.structure.trim(),
       fonction: trainer.fonction.trim(),
       nni: trainer.nni.trim(),
+      telephone: trainer.telephone.trim(),
       compte: trainer.compte.trim(),
       banque: trainer.banque.trim(),
       montantJour: transport.value,
@@ -246,6 +248,14 @@ export function RecordForm({
             labelFr="NNI"
             value={trainer.nni}
             onChange={(nni) => setTrainer({ ...trainer, nni })}
+            ltr
+            emptyAsMissing
+          />
+          <InputField
+            labelAr="الهاتف"
+            labelFr="Téléphone"
+            value={trainer.telephone}
+            onChange={(telephone) => setTrainer({ ...trainer, telephone })}
             ltr
             emptyAsMissing
           />
@@ -397,6 +407,7 @@ function emptyTrainer(): TrainerDraft {
     structure: "",
     fonction: "",
     nni: "",
+    telephone: "",
     compte: "",
     banque: "",
     montantJour: "2000",
@@ -423,6 +434,7 @@ function trainerToDraft(person: Trainer): TrainerDraft {
     structure: person.structure,
     fonction: person.fonction,
     nni: person.nni,
+    telephone: person.telephone,
     compte: person.compte,
     banque: person.banque,
     montantJour: person.montantJour == null ? "" : String(person.montantJour),

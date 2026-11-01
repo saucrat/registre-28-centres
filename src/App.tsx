@@ -246,7 +246,7 @@ export function App() {
   });
 
   const trainers = (data?.trainers ?? []).filter((person) => {
-    if (!matchesQuery([person.nom, person.nni, person.compte, person.banque, person.structure, person.fonction, person.numero], query)) {
+    if (!matchesQuery([person.nom, person.nni, person.telephone, person.compte, person.banque, person.structure, person.fonction, person.numero], query)) {
       return false;
     }
     if (bank === "__missing__" && person.banque.trim()) return false;
@@ -272,7 +272,10 @@ export function App() {
     const kind = sending.kind;
     const id = sending.id;
     let cancelled = false;
-    const phone = kind === "beneficiaries" ? (target as Beneficiary).telephone : "";
+    const phone =
+      kind === "beneficiaries"
+        ? (target as Beneficiary).telephone
+        : (target as Trainer).telephone;
     const wa = toWhatsAppPhone(phone);
 
     async function run() {
@@ -856,15 +859,16 @@ function beneficiaryRow(person: Beneficiary): PersonRow {
 
 function trainerRow(person: Trainer): PersonRow {
   const bank = person.banque.trim();
+  const phone = person.telephone.trim();
   return {
     id: person.id,
     numero: person.numero,
     name: person.nom.trim() || "بدون اسم",
-    meta: [person.structure.trim(), bank || person.fonction.trim()].filter(Boolean).join(" · ") || "—",
+    meta: [phone, bank || person.structure.trim()].filter(Boolean).join(" · ") || "—",
     gap: bank ? "" : "البنك غير مُعطى",
     amount: money(personTotal("trainers", person)),
     incomplete: gapsOf("trainers", person).length > 0,
-    phone: "",
+    phone,
     texted: Boolean(person.texted),
   };
 }

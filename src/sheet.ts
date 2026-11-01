@@ -104,6 +104,7 @@ export function toSheet(kind: Kind, person: Beneficiary | Trainer): SheetModel {
       field("المؤسسة", "Structure", item.structure, optionNote(STRUCTURES, item.structure)),
       field("الوظيفة", "Fonction", item.fonction, optionNote(FONCTIONS, item.fonction)),
       field("الرقم الوطني", "NNI", item.nni),
+      field("الهاتف", "Téléphone", item.telephone),
       field("رقم الحساب", "N° de compte", item.compte),
       field("البنك", "Banque", item.banque, optionNote(BANKS, item.banque)),
       field("المبلغ لليوم", "Montant / jour", item.montantJour == null ? "" : formatNumber(item.montantJour)),
